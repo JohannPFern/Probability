@@ -4,6 +4,7 @@ chance_rain = 0.5
 chance_sprinkler = 0.5
 chance_other = 0.0
 
+# Smaller sample sizes were quite noisy
 num_samples = 1_000_000
 
 
@@ -17,11 +18,16 @@ class Sample:
         return f"rain {self.rain} | sprinkle {self.sprinkler} | wet {self.wet}"
 
 
+# All the following analysis could be done with generators and tracking the number of times traits coexist...
+# But I think this structure is nice as it allows for easy building off from
 samples = []
 
 for i in range(num_samples):
     samples.append(Sample())
 
+
+# samples_var is the sublist of samples where var is true
+# samples_nvar is the sublist of samples where var is false
 samples_r = [sample for sample in samples if sample.rain == 1]
 samples_s = [sample for sample in samples if sample.sprinkler == 1]
 samples_rns = [sample for sample in samples_r if sample.sprinkler == 0]
@@ -44,4 +50,3 @@ print(f"Probability rain given wet: {len(samples_rw)/len(samples_w)}")
 print(f"Probability rain given wet and sprinkler: {len(samples_rsw)/len(samples_sw)}")
 print(f"Probability rain given wet and no sprinkler: {len(samples_rnsw)/len(samples_nsw)}")
 print(f"Rain and sprinklers dependent given wet")
-
